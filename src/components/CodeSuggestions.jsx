@@ -12,24 +12,28 @@ export default function CodeSuggestions({ code, setCode, darkMode }) {
   const getSuggestions = async () => {
     setIsLoading(true);
     try {
-      // Correct model configuration
       const model = genAI.getGenerativeModel({
         model: "gemini-2.0-flash",
       });
 
-      // Improved prompt with code extraction
       const currentCode = code["/App.js"] || "";
-      const prompt = `Improve this React code and return ONLY the updated code without explanations: 
+      const prompt = `Analyze this React component and suggest improved version with:
+      1. Modern React best practices
+      2. Better accessibility
+      3. Proper component structure
+      4. Error boundaries
+      5. Advanced Tailwind CSS usage
+      Return ONLY the updated code without explanations. Original code:
       ${currentCode}`;
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
       const text = response.text();
 
-      // Clean up code formatting
       const cleanedCode = text
-        .replace(/```(jsx|javascript)/g, "")
-        .replace(/```/g, "")
+        .replace(/^```(jsx|javascript|typescript)/gm, "")
+        .replace(/```$/gm, "")
+        .replace(/^${currentCode}$/gm, "")
         .trim();
       setSuggestion(cleanedCode);
       setIsModalOpen(true);
