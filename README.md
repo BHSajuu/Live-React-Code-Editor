@@ -1,12 +1,54 @@
-# React + Vite
+# DevDistruct - Live React Code Editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+DevDistruct is a live code editor built using React and Sandpack, allowing users to write, edit, and execute React code in real time. The project also integrates external package installation and AI-powered code suggestions using the Gemini API.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+### Core Features
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Live Code Editing**: Uses Sandpack to enable real-time code editing with a preview pane.
+- **External Library Installation**: Implements a terminal (XTerm.js) to install and use NPM packages dynamically.
+- **AI-Powered Code Suggestions**: Uses the Gemini API to suggest and improve code snippets.
+- **User-Friendly Interface**: Provides a clean and intuitive UI with proper error handling and console output.
+- **Theme Switching**: Supports dark and light mode for better user experience.
+
+### Upcoming Features
+
+- **File Management within the Editor** (Planned for future updates).
+- **Auto-suggestions and Linting Support** (Bonus feature).
+
+## Technologies Used
+
+- **Frontend**: React, Sandpack
+- **Terminal**: XTerm.js
+- **AI Integration**: Google Gemini API
+- **UI Styling**: Tailwind CSS
+
+## Installation & Setup
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/BHSajuu/Live-React-Code-Editor.git
+   cd Live-React-Code-Editor
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Set up your environment variables in a `.env` file:
+   ```sh
+   VITE_GEMINI_API_KEY=your_api_key_here
+   ```
+4. Start the development server:
+   ```sh
+   npm run dev
+   ```
+
+## Usage
+
+- Write and edit React code in the editor.
+- Install external libraries using the integrated terminal (`npm install <package-name>`).
+- Click on "Get AI Suggestions" to improve your code using the Gemini API.
+- Switch between dark and light mode as per preference.
