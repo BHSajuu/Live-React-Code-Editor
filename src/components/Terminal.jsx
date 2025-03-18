@@ -10,7 +10,7 @@ export default function TerminalComponent({ onCommand, darkMode }) {
   const fitAddon = useRef(new FitAddon());
   const [isInitialized, setIsInitialized] = useState(false);
   const inputBuffer = useRef([]);
-
+  const [showTerminal, setShowTerminal] = useState(false);
   const welcomeShown = useRef(false);
 
   // Initial welcome message and prompt
@@ -44,7 +44,7 @@ export default function TerminalComponent({ onCommand, darkMode }) {
   };
 
   useEffect(() => {
-    if (!terminalRef.current || isInitialized) return;
+    if (!terminalRef.current || isInitialized || !showTerminal) return;
 
     const term = new Terminal({
       cursorBlink: true,
@@ -83,7 +83,7 @@ export default function TerminalComponent({ onCommand, darkMode }) {
       welcomeShown.current = false;
       setIsInitialized(false);
     };
-  }, []);
+  }, [showTerminal]);
 
   useEffect(() => {
     if (!terminalInstance.current) return;
@@ -112,7 +112,7 @@ export default function TerminalComponent({ onCommand, darkMode }) {
       if (command.startsWith("npm install")) {
         const packages = command.split(" ").slice(2);
         onCommand(packages);
-        term.write("\r\n Package Installed...");
+        term.write("\r\n Package Installed.");
       } else {
         term.write("\r\nUnknown command");
       }
@@ -126,16 +126,62 @@ export default function TerminalComponent({ onCommand, darkMode }) {
   };
 
   return (
-    <div
-      ref={terminalRef}
-      className={`h-48 relative p-4 ${
-        darkMode ? "bg-gray-900" : "bg-white border border-gray-200"
-      }`}
-      style={{
-        minHeight: "12rem",
-        width: "100%",
-        overflow: "hidden",
-      }}
-    />
+    <div>
+      {!showTerminal ? (
+        <div className="h-48 mt-1">
+          <button
+            onClick={() => setShowTerminal(true)}
+            className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 focus:outline-none transition-all flex items-center gap-3 group relative overflow-hidden">
+            <div className="absolute -inset-1.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg opacity-20 group-hover:opacity-30 transition-opacity"></div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-cyan-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            <span className="font-mono text-sm">Launch Terminal</span>
+            <div className="absolute bottom-0 inset-x-0 h-1 bg-cyan-500/50 animate-progress" />
+          </button>
+        </div>
+      ) : (
+        <div className="relative">
+          <button
+            onClick={() => setShowTerminal(false)}
+            className="absolute top-3 right-3 p-1.5 rounded-full hover:bg-red-500/20 transition-colors z-10">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-red-500 hover:text-red-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          <div
+            ref={terminalRef}
+            className={`h-48 relative p-4 ${
+              darkMode ? "bg-gray-900" : "bg-white border border-gray-200"
+            }`}
+            style={{
+              minHeight: "12rem",
+              width: "100%",
+              overflow: "hidden",
+            }}
+          />
+        </div>
+      )}
+    </div>
   );
 }

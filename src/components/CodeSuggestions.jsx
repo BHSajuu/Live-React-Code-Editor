@@ -12,36 +12,34 @@ export default function CodeSuggestions({ code, setCode, darkMode }) {
   const getSuggestions = async () => {
     setIsLoading(true);
     try {
-      const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash",
-      });
-
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
       const currentCode = code["/App.js"] || "";
-      const prompt = `Analyze this React component and suggest improved version with:
-      1. If the code using any package or libray then give suggestion align with that
-      2. Modern React best practices
-      3. Enhanced accessibility features
-      4. Optimized component structure
-      5. Advanced Tailwind CSS techniques
-      6. improved UI/UX by doing necessary changes ,you may also chnage the content for the betterment of the UI/UX
-      Return ONLY the updated code without explanations. Original code:
-      ${currentCode}`;
+      const prompt = `Analyze the following React component and provide an improved version with these enhancements:
+                      1. Utilize existing imported packages/libraries to their full potential
+                      2. Maintain and enhance current functionality rather than replacing it
+                      3. Follow modern React best practices with proper component structure
+                      4. Enhance accessibility features based on current implementation
+                      5. Improve UI/UX using existing Tailwind CSS patterns
+                      6. Add meaningful code comments where appropriate
+                      7. Keep all existing functionality but implement it better
+
+                      Return ONLY the updated code without any explanations.
+                      Current code:
+                      ${currentCode}`;
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
       const text = response.text();
-
       const cleanedCode = text
-        .replace(/^```(jsx|javascript|typescript)/gm, "")
+        .replace(/^```(jsx|javascript|typescript)\n?/gm, "")
         .replace(/```$/gm, "")
-        .replace(/^${currentCode}$/gm, "")
         .trim();
       setSuggestion(cleanedCode);
       setIsModalOpen(true);
     } catch (error) {
       console.error("Gemini API error:", error);
       toast.error(
-        "Failed to get suggestions. Check API key/model availability"
+        "Failed to get suggestions. Check API key or model availability."
       );
     } finally {
       setIsLoading(false);
@@ -58,10 +56,9 @@ export default function CodeSuggestions({ code, setCode, darkMode }) {
       <button
         onClick={getSuggestions}
         disabled={isLoading}
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50">
+        className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
         {isLoading ? "Generating..." : "Get AI Suggestions"}
       </button>
-
       {isModalOpen && (
         <SuggestionModal
           suggestion={suggestion}
