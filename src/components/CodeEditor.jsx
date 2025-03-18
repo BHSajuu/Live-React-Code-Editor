@@ -1,4 +1,6 @@
+import { autocompletion, completionKeymap } from "@codemirror/autocomplete";
 import { Sandpack } from "@codesandbox/sandpack-react";
+import { ecoLight } from "@codesandbox/sandpack-themes";
 import { useEffect, useRef, useState } from "react";
 import Terminal from "./Terminal";
 
@@ -6,14 +8,12 @@ export default function CodeEditor({ darkMode, initialFiles, onFilesChange }) {
   const [files, setFiles] = useState(initialFiles);
   const initialMount = useRef(true);
 
-  // Sync with parent only on user edits, not initial mount
   useEffect(() => {
     if (!initialMount.current) {
       onFilesChange(files);
     }
   }, [files]);
 
-  // Handle initial files and parent updates
   useEffect(() => {
     if (JSON.stringify(initialFiles) !== JSON.stringify(files)) {
       setFiles(initialFiles);
@@ -35,12 +35,21 @@ export default function CodeEditor({ darkMode, initialFiles, onFilesChange }) {
       <Sandpack
         template="react"
         files={files}
-        customSetup={{ dependencies }}
+        customSetup={{
+          dependencies,
+          extensions: [autocompletion(), completionKeymap],
+        }}
         options={{
           showLineNumbers: true,
+          showInlineErrors: true,
           showConsole: true,
+          showNavigator: true,
+          showTabs: true,
+          closableTabs: true,
+          editorHeight: 480,
+          autorun: false,
         }}
-        theme={darkMode ? "dark" : "light"}
+        theme={darkMode ? "dark" : ecoLight}
         className="flex-1"
       />
       <Terminal onCommand={handleInstall} darkMode={darkMode} />

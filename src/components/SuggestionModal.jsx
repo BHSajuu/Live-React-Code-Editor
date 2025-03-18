@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function SuggestionModal({
   suggestion,
@@ -6,6 +6,11 @@ export default function SuggestionModal({
   onClose,
   darkMode,
 }) {
+  const [width, setWidth] = useState(400);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const startWidth = useRef(400);
+
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") onClose();
@@ -14,10 +19,48 @@ export default function SuggestionModal({
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
+  const handleMouseDown = (e) => {
+    isDragging.current = true;
+    startX.current = e.clientX;
+    startWidth.current = width;
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging.current) return;
+    const deltaX = startX.current - e.clientX;
+    const newWidth = startWidth.current + deltaX;
+    setWidth(Math.min(Math.max(300, newWidth), 800));
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
   return (
     <div className="fixed right-0 top-0 h-full z-50 shadow-xl">
+      {/* Resize handle */}
       <div
-        className={`h-full w-[400px] ${
+        className={`absolute left-0 top-0 h-full w-2 cursor-col-resize z-50
+          ${darkMode ? "hover:bg-gray-600" : "hover:bg-gray-300"}`}
+        onMouseDown={handleMouseDown}
+      />
+
+      <div
+        style={{ width: `${width}px` }}
+        className={`h-full ${
           darkMode ? "bg-gray-800" : "bg-white"
         } flex flex-col border-l ${
           darkMode ? "border-gray-700" : "border-gray-200"

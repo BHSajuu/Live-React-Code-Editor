@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@codesandbox/sandpack-react": "^2.20.0",
+    "@codesandbox/sandpack-themes": "^2.0.21",
     "@google/generative-ai": "^0.24.0",
     "@tailwindcss/vite": "^4.0.14",
     "@xterm/xterm": "^5.5.0",
+    "autocomplete": "^0.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-toastify": "^11.0.5",

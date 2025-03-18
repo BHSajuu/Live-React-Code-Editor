@@ -11,7 +11,6 @@ export default function TerminalComponent({ onCommand, darkMode }) {
   const [isInitialized, setIsInitialized] = useState(false);
   const inputBuffer = useRef([]);
 
-  // Single welcome message controller
   const welcomeShown = useRef(false);
 
   // Initial welcome message and prompt
@@ -24,31 +23,26 @@ export default function TerminalComponent({ onCommand, darkMode }) {
     }
   };
 
-  // Handle backspace and input
   const handleInput = (term, data) => {
     const buffer = inputBuffer.current;
 
-    // Handle backspace
     if (data === "\x7f") {
       if (buffer.length > 0) {
         buffer.pop();
-        term.write("\x1B[D \x1B[D"); // Move left, erase, move left
+        term.write("\x1B[D \x1B[D");
       }
       return;
     }
 
-    // Handle enter
     if (data === "\r") {
       handleEnter(term);
       return;
     }
 
-    // Handle regular input
     buffer.push(data);
     term.write(data);
   };
 
-  // Initialize terminal
   useEffect(() => {
     if (!terminalRef.current || isInitialized) return;
 
@@ -86,12 +80,11 @@ export default function TerminalComponent({ onCommand, darkMode }) {
     return () => {
       clearTimeout(timeoutId);
       term.dispose();
-      welcomeShown.current = false; // Reset welcome flag
+      welcomeShown.current = false;
       setIsInitialized(false);
     };
   }, []);
 
-  // Handle theme changes
   useEffect(() => {
     if (!terminalInstance.current) return;
 
@@ -103,7 +96,6 @@ export default function TerminalComponent({ onCommand, darkMode }) {
 
     requestAnimationFrame(() => {
       try {
-        // terminalInstance.current.clear();
         showWelcomeMessage(terminalInstance.current);
         fitAddon.current.fit();
       } catch (error) {

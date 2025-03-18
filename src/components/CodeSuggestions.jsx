@@ -18,11 +18,12 @@ export default function CodeSuggestions({ code, setCode, darkMode }) {
 
       const currentCode = code["/App.js"] || "";
       const prompt = `Analyze this React component and suggest improved version with:
-      1. Modern React best practices
-      2. Better accessibility
-      3. Proper component structure
-      4. Error boundaries
-      5. Advanced Tailwind CSS usage
+      1. If the code using any package or libray then give suggestion align with that
+      2. Modern React best practices
+      3. Enhanced accessibility features
+      4. Optimized component structure
+      5. Advanced Tailwind CSS techniques
+      6. improved UI/UX by doing necessary changes ,you may also chnage the content for the betterment of the UI/UX
       Return ONLY the updated code without explanations. Original code:
       ${currentCode}`;
 
