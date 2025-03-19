@@ -29,7 +29,7 @@ export default function CodeSuggestions({ code, setCode, darkMode }) {
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      const text = response.text();
+      const text = await response.text();
       const cleanedCode = text
         .replace(/^```(jsx|javascript|typescript)\n?/gm, "")
         .replace(/```$/gm, "")

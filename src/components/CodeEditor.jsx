@@ -1,26 +1,10 @@
 import { autocompletion, completionKeymap } from "@codemirror/autocomplete";
 import { Sandpack } from "@codesandbox/sandpack-react";
 import { ecoLight } from "@codesandbox/sandpack-themes";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Terminal from "./Terminal";
 
 export default function CodeEditor({ darkMode, initialFiles, onFilesChange }) {
-  const [files, setFiles] = useState(initialFiles);
-  const initialMount = useRef(true);
-
-  useEffect(() => {
-    if (!initialMount.current) {
-      onFilesChange(files);
-    }
-  }, [files]);
-
-  useEffect(() => {
-    if (JSON.stringify(initialFiles) !== JSON.stringify(files)) {
-      setFiles(initialFiles);
-    }
-    initialMount.current = false;
-  }, [initialFiles]);
-
   const [dependencies, setDependencies] = useState({});
 
   const handleInstall = (packages) => {
@@ -30,7 +14,6 @@ export default function CodeEditor({ darkMode, initialFiles, onFilesChange }) {
     }));
   };
 
-  // New state for dynamic editor height
   const [editorHeight, setEditorHeight] = useState(580);
   const startYRef = useRef(0);
   const startHeightRef = useRef(580);
@@ -49,7 +32,6 @@ export default function CodeEditor({ darkMode, initialFiles, onFilesChange }) {
     const deltaY = e.clientY - startYRef.current;
     const newHeight = startHeightRef.current + deltaY;
     if (newHeight > 100) {
-      // set a minimum height
       setEditorHeight(newHeight);
     }
   };
@@ -64,9 +46,8 @@ export default function CodeEditor({ darkMode, initialFiles, onFilesChange }) {
     <div className="flex flex-col h-full px-5">
       <Sandpack
         template="react"
-        files={files}
-        // Added onChange to update the code when you type
-        onChange={(updatedFiles) => setFiles(updatedFiles)}
+        files={initialFiles}
+        onChange={onFilesChange}
         customSetup={{
           dependencies,
           extensions: [autocompletion(), completionKeymap],
@@ -82,7 +63,6 @@ export default function CodeEditor({ darkMode, initialFiles, onFilesChange }) {
           closableTabs: true,
           editorHeight: editorHeight,
           autorun: false,
-          // Added Tailwind CSS CDN as an external resource
           externalResources: ["https://cdn.tailwindcss.com"],
         }}
         theme={darkMode ? "dark" : ecoLight}
