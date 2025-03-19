@@ -65,6 +65,8 @@ export default function CodeEditor({ darkMode, initialFiles, onFilesChange }) {
       <Sandpack
         template="react"
         files={files}
+        // Added onChange to update the code when you type
+        onChange={(updatedFiles) => setFiles(updatedFiles)}
         customSetup={{
           dependencies,
           extensions: [autocompletion(), completionKeymap],
@@ -73,6 +75,8 @@ export default function CodeEditor({ darkMode, initialFiles, onFilesChange }) {
           showLineNumbers: true,
           showInlineErrors: true,
           showConsole: true,
+          showConsoleButton: true,
+          resetOnPreviewRestart: true,
           showNavigator: true,
           showTabs: true,
           closableTabs: true,

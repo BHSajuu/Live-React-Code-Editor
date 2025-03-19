@@ -8,7 +8,7 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [code, setCode] = useState({
     "/App.js": `import React from 'react';
-    
+
 export default function App() {
   return (
     <div className="p-4">
@@ -20,7 +20,7 @@ export default function App() {
   });
 
   const handleReset = () => {
-    setFiles({
+    setCode({
       "/App.js": `import React from 'react';
 
 export default function App() {
