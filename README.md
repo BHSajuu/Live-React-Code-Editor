@@ -1,8 +1,8 @@
-# DevDistruct - Live React Code Editor
+# Live React Code Editor
 
 ## Overview
 
-DevDistruct is a live code editor built using React and Sandpack, allowing users to write, edit, and execute React code in real time. The project also integrates external package installation and AI-powered code suggestions using the Gemini API.
+It is a live code editor built using React and Sandpack, allowing users to write, edit, and execute React code in real time. The project also integrates external package installation and AI-powered code suggestions using the Gemini API.
 
 ## Features
 
